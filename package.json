@@ -1,0 +1,20 @@
+{
+  "name": "reactform",
+  "version": "1.0.0",
+  "description": "```javascript @na7ank ➜ /workspaces/ReactForm (main) $ npm create vite@latest Need to install the following packages: create-vite@6.0.1 Ok to proceed? (y) y",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run start-server && npm run start-client",
+    "start-server": "node backend/index.js",
+    "start-client": "cd showcase && npm run preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0"
+  }
+}
