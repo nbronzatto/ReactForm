@@ -8,13 +8,11 @@ function Form() {
     phone: '',
     email: '',
     cep: '',
-    state: '',
-    city: '',
-    address: '',
     service: '',
     workRegime: '',
     hasVehicle: '',
-    document: ''
+    cpf: '',  // Campo CPF
+    cnpj: ''  // Campo CNPJ
   });
   const [currentSection, setCurrentSection] = useState(0);
   const [slideDirection, setSlideDirection] = useState('next');
@@ -24,14 +22,6 @@ function Form() {
     setFormData({
       ...formData,
       [name]: value,
-    });
-  };
-
-  const handleDocumentChange = (e) => {
-    const value = e.target.value;
-    setFormData({
-      ...formData,
-      document: value,
     });
   };
 
@@ -45,10 +35,33 @@ function Form() {
     setCurrentSection((prev) => prev - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Formulário enviado!');
-  };
+    try {
+        console.log("Enviando dados:", JSON.stringify(formData));  // Adicione esse log
+        const response = await fetch('/api/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert('Formulário enviado com sucesso!');
+            console.log('Resposta do servidor:', result);
+        } else {
+            alert('Erro ao enviar o formulário.');
+            console.error('Erro no servidor:', response.statusText);
+        }
+    } catch (error) {
+        alert('Erro ao enviar o formulário.');
+        console.error('Erro:', error);
+    }
+};
+
+  
 
   const getSlideAnimation = () => {
     return slideDirection === 'next' ? 'slide-left' : 'slide-right';
@@ -56,8 +69,7 @@ function Form() {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <header className="headerform">
-      </header>
+      <header className="headerform"></header>
 
       {currentSection === 0 && (
         <div className={`section ${getSlideAnimation()}`}>
@@ -181,22 +193,29 @@ function Form() {
         <div className={`section ${getSlideAnimation()}`}>
           <h2>Dados Adicionais</h2>
           <div className="form-group">
-            <label htmlFor="document">CPF ou CNPJ:</label>
+            <label htmlFor="cpf">CPF:</label>
             <InputMask
-              mask={formData.document.length <= 14 ? "999.999.999-99" : "99.999.999/9999-99"}
-              value={formData.document}
-              onChange={handleDocumentChange}
-              name="document"
-              id="document"
+              mask="999.999.999-99"
+              value={formData.cpf}
+              onChange={handleChange}
+              name="cpf"
+              id="cpf"
               required
             >
-              {(inputProps) => (
-                <input
-                  {...inputProps}
-                  type="text"
-                  placeholder={formData.document.length <= 14 ? "xxx.xxx.xxx-xx" : "xx.xxx.xxx/xxxx-xx"}
-                />
-              )}
+              {(inputProps) => <input {...inputProps} type="text" placeholder="xxx.xxx.xxx-xx" />}
+            </InputMask>
+          </div>
+          <div className="form-group">
+            <label htmlFor="cnpj">CNPJ:</label>
+            <InputMask
+              mask="99.999.999/9999-99"
+              value={formData.cnpj}
+              onChange={handleChange}
+              name="cnpj"
+              id="cnpj"
+              required
+            >
+              {(inputProps) => <input {...inputProps} type="text" placeholder="xx.xxx.xxx/xxxx-xx" />}
             </InputMask>
           </div>
         </div>

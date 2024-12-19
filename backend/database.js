@@ -9,9 +9,8 @@ async function connectToDatabase() {
     const client = new MongoClient(dbUrl);
     await client.connect();
     const db = client.db(dbName);
-    const collection = db.collection('notes');
+    const collection = db.collection('submissions');
     return collection;
 }
-
 
 module.exports = connectToDatabase;
