@@ -7,6 +7,7 @@ function Form() {
     fullName: '',
     phone: '',
     email: '',
+    cep: '',
     state: '',
     city: '',
     address: '',
@@ -16,6 +17,7 @@ function Form() {
     document: ''
   });
   const [currentSection, setCurrentSection] = useState(0);
+  const [slideDirection, setSlideDirection] = useState('next');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,10 +36,12 @@ function Form() {
   };
 
   const handleNext = () => {
+    setSlideDirection('next');
     setCurrentSection((prev) => prev + 1);
   };
 
   const handleBack = () => {
+    setSlideDirection('back');
     setCurrentSection((prev) => prev - 1);
   };
 
@@ -46,14 +50,17 @@ function Form() {
     alert('Formulário enviado!');
   };
 
+  const getSlideAnimation = () => {
+    return slideDirection === 'next' ? 'slide-left' : 'slide-right';
+  };
+
   return (
     <form className="form" onSubmit={handleSubmit}>
-      {/* Cabeçalho com a imagem de fundo */}
       <header className="headerform">
       </header>
 
       {currentSection === 0 && (
-        <div className="section">
+        <div className={`section ${getSlideAnimation()}`}>
           <h2>Dados de Contato</h2>
           <div className="form-group">
             <label htmlFor="fullName">Nome Completo:</label>
@@ -91,43 +98,23 @@ function Form() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="state">Estado:</label>
-            <input
-              type="text"
-              id="state"
-              name="state"
-              value={formData.state}
+            <label htmlFor="cep">CEP:</label>
+            <InputMask
+              mask="99999-999"
+              value={formData.cep}
               onChange={handleChange}
+              name="cep"
+              id="cep"
               required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="city">Cidade:</label>
-            <input
-              type="text"
-              id="city"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Endereço (Rua, Número, Bairro):</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
+            >
+              {(inputProps) => <input {...inputProps} type="text" placeholder="xxxxx-xxx" />}
+            </InputMask>
           </div>
         </div>
       )}
 
       {currentSection === 1 && (
-        <div className="section">
+        <div className={`section ${getSlideAnimation()}`}>
           <h2>Produtos e Serviços</h2>
           <div className="form-group">
             <label htmlFor="service">Qual serviço da Nova Orion te chamou a atenção?</label>
@@ -158,7 +145,7 @@ function Form() {
               <option value="clt">CLT (carteira assinada)</option>
               <option value="aposentado">Aposentado/pensionista</option>
               <option value="autonomo">Autônomo</option>
-              <option value="empresario">Empresário/ Proprietário/ PJ</option>
+              <option value="empresario">Empresário Proprietário PJ</option>
               <option value="outro">Outro</option>
             </select>
           </div>
@@ -191,7 +178,7 @@ function Form() {
       )}
 
       {currentSection === 2 && (
-        <div className="section">
+        <div className={`section ${getSlideAnimation()}`}>
           <h2>Dados Adicionais</h2>
           <div className="form-group">
             <label htmlFor="document">CPF ou CNPJ:</label>
