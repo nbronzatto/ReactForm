@@ -11,9 +11,11 @@ function Form() {
     service: '',
     workRegime: '',
     hasVehicle: '',
-    cpf: '',  // Campo CPF
-    cnpj: ''  // Campo CNPJ
+    cpf: '',
+    cnpj: '',
+    submissionDate: '', // Campo para armazenar a data de submissão
   });
+
   const [currentSection, setCurrentSection] = useState(0);
   const [slideDirection, setSlideDirection] = useState('next');
 
@@ -37,34 +39,47 @@ function Form() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-        console.log("Enviando dados:", JSON.stringify(formData));  // Adicione esse log
-        const response = await fetch('/api/submit', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
 
-        if (response.ok) {
-            const result = await response.json();
-            alert('Formulário enviado com sucesso!');
-            console.log('Resposta do servidor:', result);
-        } else {
-            alert('Erro ao enviar o formulário.');
-            console.error('Erro no servidor:', response.statusText);
-        }
-    } catch (error) {
-        alert('Erro ao enviar o formulário.');
-        console.error('Erro:', error);
+    // Validação: Certifique-se de que todos os campos obrigatórios estão preenchidos
+    const { fullName, phone, email, cep, service, workRegime, hasVehicle, cpf, cnpj } = formData;
+
+    if (!fullName || !phone || !email || !cep || !service || !workRegime || !hasVehicle) {
+      alert('Por favor, preencha todos os campos obrigatórios.');
+      return;
     }
-};
 
-  
+    // Validação: Certifique-se de que pelo menos um dos campos CPF ou CNPJ esteja preenchido
+    if (!cpf && !cnpj) {
+      alert('Você deve preencher ao menos um dos campos: CPF ou CNPJ.');
+      return;
+    }
 
-  const getSlideAnimation = () => {
-    return slideDirection === 'next' ? 'slide-left' : 'slide-right';
+    // Adiciona a data atual ao objeto de dados
+    const currentDate = new Date().toISOString();
+    const dataToSend = { ...formData, submissionDate: currentDate };
+
+    try {
+      console.log("Enviando dados:", JSON.stringify(dataToSend));  // Adicionando log com a data
+      const response = await fetch('/api/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert('Formulário enviado com sucesso!');
+        console.log('Resposta do servidor:', result);
+      } else {
+        alert('Erro ao enviar o formulário.');
+        console.error('Erro no servidor:', response.statusText);
+      }
+    } catch (error) {
+      alert('Erro ao enviar o formulário.');
+      console.error('Erro:', error);
+    }
   };
 
   return (
@@ -72,7 +87,7 @@ function Form() {
       <header className="headerform"></header>
 
       {currentSection === 0 && (
-        <div className={`section ${getSlideAnimation()}`}>
+        <div className="section">
           <h2>Dados de Contato</h2>
           <div className="form-group">
             <label htmlFor="fullName">Nome Completo:</label>
@@ -126,7 +141,7 @@ function Form() {
       )}
 
       {currentSection === 1 && (
-        <div className={`section ${getSlideAnimation()}`}>
+        <div className="section">
           <h2>Produtos e Serviços</h2>
           <div className="form-group">
             <label htmlFor="service">Qual serviço da Nova Orion te chamou a atenção?</label>
@@ -190,7 +205,7 @@ function Form() {
       )}
 
       {currentSection === 2 && (
-        <div className={`section ${getSlideAnimation()}`}>
+        <div className="section">
           <h2>Dados Adicionais</h2>
           <div className="form-group">
             <label htmlFor="cpf">CPF:</label>
@@ -200,7 +215,6 @@ function Form() {
               onChange={handleChange}
               name="cpf"
               id="cpf"
-              required
             >
               {(inputProps) => <input {...inputProps} type="text" placeholder="xxx.xxx.xxx-xx" />}
             </InputMask>
@@ -213,7 +227,6 @@ function Form() {
               onChange={handleChange}
               name="cnpj"
               id="cnpj"
-              required
             >
               {(inputProps) => <input {...inputProps} type="text" placeholder="xx.xxx.xxx/xxxx-xx" />}
             </InputMask>

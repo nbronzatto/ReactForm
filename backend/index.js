@@ -8,7 +8,13 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Habilitar CORS
-app.use(cors());
+const corsOptions = {
+    origin: 'http://localhost:5173', // Apenas permite requisições de http://localhost:5173
+    methods: ['GET', 'POST'], // Você pode adicionar outros métodos que deseja permitir
+    allowedHeaders: ['Content-Type'], // Permite apenas o cabeçalho Content-Type
+  };
+app.use(cors(corsOptions));
+  
   
 
 // Configurar bodyParser para lidar com JSON
@@ -20,7 +26,7 @@ app.use(express.static(path.join(__dirname, '../front/dist')));
 // Rota para receber dados do formulário via POST
 app.post('/api/submit', async (req, res) => {
     try {
-        console.log('Dados recebidos:', req.body); // Adicione um log para ver os dados recebidos
+        //console.log('Dados recebidos:', req.body); // Adicione um log para ver os dados recebidos
         const formData = req.body;
         const collection = await connectToDatabase();
         const result = await collection.insertOne(formData);
