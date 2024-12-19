@@ -1,0 +1,126 @@
+.form-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.headerform {
+  background-image: url('/public/banner.png'); /* Caminho para a imagem */
+  background-size: cover; /* Ajuste para cobrir todo o espaço */
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  height: 150px; /* Ajuste a altura conforme necessário */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+  padding: 20px 0; /* Adicionando espaçamento para melhorar a distribuição */
+}
+
+
+.form {
+  background: linear-gradient(135deg, #e0f7ff, #a4d4ff);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  margin-top: -30px; /* Ajuste o espaço entre o cabeçalho e o formulário */
+}
+
+.form h2 {
+  color: #004080;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  text-align: center;
+  border-bottom: 2px solid #004080;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #004080;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #b3d9ff;
+  border-radius: 8px;
+  background-color: #f0f8ff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  border-color: #0066cc;
+  box-shadow: 0 0 8px rgba(0, 102, 204, 0.5);
+  outline: none;
+}
+
+.radio-group {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.radio-group label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #00509e;
+}
+
+.radio-group input {
+  margin-right: 5px;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+button {
+  background: linear-gradient(135deg, #0073e6, #004080);
+  color: white;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #00509e, #00264d);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  .form {
+    padding: 20px;
+  }
+
+  .headerform h1 {
+    font-size: 1.5rem; /* Ajusta a fonte em telas pequenas */
+  }
+
+  button {
+    font-size: 0.9rem;
+  }
+}
