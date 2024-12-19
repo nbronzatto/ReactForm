@@ -40,6 +40,7 @@ touch database.js
 npm i express
 npm install mongodb dotenv cors
 npm install --save-dev vite
+npm install react-input-mask
 
 Adicione esse script:
 "start": "node server/index.js"

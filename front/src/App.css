@@ -1,9 +1,12 @@
+/* Google Fonts - Source Code Pro */
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap');
 /* Estilos globais */
 * {
   margin: 0;
   padding: 0;
+  color: #2c2c2c;
   box-sizing: border-box;
-  font-family: 'Arial', sans-serif;
+  font-family: SourceCode-Regular, monospace;
 }
 
 body, html {
