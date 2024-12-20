@@ -4,6 +4,7 @@
   "description": "```javascript @na7ank ➜ /workspaces/ReactForm (main) $ npm create vite@latest Need to install the following packages: create-vite@6.0.1 Ok to proceed? (y) y",
   "main": "index.js",
   "scripts": {
+    "build": "cd front && npm install && npm run build && cd .. && npm install",
     "start": "npm run start-server & npm run start-client",
     "start-server": "node backend/index.js",
     "start-client": "cd front && npm run dev"
