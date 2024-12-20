@@ -182,7 +182,8 @@ background-color: #0066cc;
 .form {
   border-radius: 1rem;
   padding: 1.5rem;
-  width: 80%;
+  width: 90%;
+  min-width: auto;
 }
 
 .button-group {
