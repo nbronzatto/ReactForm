@@ -1,18 +1,22 @@
 /* Google Fonts - Source Code Pro */
 @import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;500;600;700&display=swap');
+
 /* Estilos globais */
 * {
   margin: 0;
   padding: 0;
   color: #2c2c2c;
   box-sizing: border-box;
-  font-family: SourceCode-Regular, monospace;
+  font-family: 'Source Code Pro', monospace;
 }
 
 body, html {
   height: 100%;
   width: 100%;
   background-color: #f4f4f9;
+  background-image: radial-gradient(circle, #00a2ff91 1px, transparent 1px);
+  background-size: 30px 30px; /* Define o tamanho do ponto e a distância entre eles */
+  background-attachment: fixed; /* Faz o fundo não se mover ao rolar */
 }
 
 .app {
@@ -29,18 +33,7 @@ body, html {
   padding: 20px;
 }
 
-footer {
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  padding: 10px;
-  font-size: 0.875rem;
-  margin-top: 20px;
-}
 
-footer p {
-  margin: 0;
-}
 
 @media (max-width: 600px) {
   .main-content {
