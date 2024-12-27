@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
-const dbUrl = 'mongodb+srv://mongo_user_1:v0uvIH01Be04UE5K@mongonode-0.an8z1gw.mongodb.net/Stars?retryWrites=true&w=majority';
-const dbName = 'Stars';
+const dbUrl = process.env.CONNECTIONSTRING;
+const dbName = process.env.COLLECTION;
 
 
 
