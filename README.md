@@ -52,4 +52,10 @@ Adicione esse script:
     "start-server": "node backend/index.js",
     "start-client": "cd showcase && npm run preview"
   },
-``` 
+```
+
+# Deploy
+```javascript
+npm run build // Build
+npm start // Run services
+```
