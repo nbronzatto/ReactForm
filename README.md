@@ -1,3 +1,9 @@
+# Deploy
+```javascript
+npm run build // Build
+npm start // Run services
+```
+
 # Front
 ```javascript
 @na7ank ➜ /workspaces/ReactForm (main) $ npm create vite@latest
@@ -45,17 +51,11 @@ npm install react-input-mask
 Adicione esse script:
 "start": "node server/index.js"
 ```
-# global package.json
+# Global package.json
 ```javascript
   "scripts": {
     "start": "npm run start-server && npm run start-client",
     "start-server": "node backend/index.js",
     "start-client": "cd showcase && npm run preview"
   },
-```
-
-# Deploy
-```javascript
-npm run build // Build
-npm start // Run services
 ```
