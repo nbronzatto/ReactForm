@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import InputMask from 'react-input-mask';
+import ReCAPTCHA from 'react-google-recaptcha';
 import './Form.css';
 
 function Form() {
@@ -13,34 +14,52 @@ function Form() {
     hasVehicle: '',
     cpf: '',
     cnpj: '',
-    submissionDate: '', // Campo para armazenar a data de submissão
+    submissionDate: '',
   });
 
   const [currentSection, setCurrentSection] = useState(0);
   const [slideDirection, setSlideDirection] = useState('next');
+  const [recaptchaValue, setRecaptchaValue] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const handleNext = () => {
     setSlideDirection('next');
-    setCurrentSection((prev) => prev + 1);
+    setCurrentSection(prev => prev + 1);
   };
 
   const handleBack = () => {
     setSlideDirection('back');
-    setCurrentSection((prev) => prev - 1);
+    setCurrentSection(prev => prev - 1);
+  };
+
+  const handleRecaptchaChange = (value) => {
+    setRecaptchaValue(value);
+  };
+
+  const validateFormSection = () => {
+    const { fullName, phone, email, cep } = formData;
+    if (currentSection === 0 && (!fullName || !phone || !email || !cep)) {
+      alert('Por favor, preencha todos os campos da seção atual.');
+      return false;
+    }
+    return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação: Certifique-se de que todos os campos obrigatórios estão preenchidos
+    if (!recaptchaValue) {
+      alert('Por favor, complete o reCAPTCHA.');
+      return;
+    }
+
     const { fullName, phone, email, cep, service, workRegime, hasVehicle, cpf, cnpj } = formData;
 
     if (!fullName || !phone || !email || !cep || !service || !workRegime || !hasVehicle) {
@@ -48,43 +67,44 @@ function Form() {
       return;
     }
 
-    // Validação: Certifique-se de que pelo menos um dos campos CPF ou CNPJ esteja preenchido
     if (!cpf && !cnpj) {
-      alert('Você deve preencher ao menos um dos campos: CPF ou CNPJ.');
+      alert('Preencha CPF ou CNPJ.');
       return;
     }
 
-    // Adiciona a data atual ao objeto de dados
-    const currentDate = new Date().toISOString();
-    const dataToSend = { ...formData, submissionDate: currentDate };
-
     try {
-      console.log("Enviando dados:", JSON.stringify(dataToSend));  // Adicionando log com a data
+      const dataToSend = {
+        ...formData,
+        submissionDate: new Date().toISOString(),
+        recaptchaToken: recaptchaValue
+      };
+
       const response = await fetch('/api/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(dataToSend),
       });
 
       if (response.ok) {
-        const result = await response.json();
         alert('Formulário enviado com sucesso!');
-        console.log('Resposta do servidor:', result);
+        setFormData({
+          fullName: '', phone: '', email: '', cep: '',
+          service: '', workRegime: '', hasVehicle: '',
+          cpf: '', cnpj: '', submissionDate: ''
+        });
+        setCurrentSection(0);
       } else {
         alert('Erro ao enviar o formulário.');
-        console.error('Erro no servidor:', response.statusText);
       }
     } catch (error) {
-      alert('Erro ao enviar o formulário.');
       console.error('Erro:', error);
+      alert('Erro ao enviar o formulário.');
     }
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <header className="headerform"></header>
+    <form className={`form ${slideDirection}`} onSubmit={handleSubmit}>
+      <header className="headerform" />
 
       {currentSection === 0 && (
         <div className="section">
@@ -110,7 +130,7 @@ function Form() {
               id="phone"
               required
             >
-              {(inputProps) => <input {...inputProps} type="tel" placeholder="(xx) xxxxx-xxxx" />}
+              {(inputProps) => <input {...inputProps} type="tel" />}
             </InputMask>
           </div>
           <div className="form-group">
@@ -134,7 +154,7 @@ function Form() {
               id="cep"
               required
             >
-              {(inputProps) => <input {...inputProps} type="text" placeholder="xxxxx-xxx" />}
+              {(inputProps) => <input {...inputProps} type="text" />}
             </InputMask>
           </div>
         </div>
@@ -216,7 +236,7 @@ function Form() {
               name="cpf"
               id="cpf"
             >
-              {(inputProps) => <input {...inputProps} type="text" placeholder="xxx.xxx.xxx-xx" />}
+              {(inputProps) => <input {...inputProps} type="text" />}
             </InputMask>
           </div>
           <div className="form-group">
@@ -228,15 +248,31 @@ function Form() {
               name="cnpj"
               id="cnpj"
             >
-              {(inputProps) => <input {...inputProps} type="text" placeholder="xx.xxx.xxx/xxxx-xx" />}
+              {(inputProps) => <input {...inputProps} type="text" />}
             </InputMask>
           </div>
+          {/*
+          <div className="form-group recaptcha-container">
+            <ReCAPTCHA
+              sitekey="YOUR_RECAPTCHA_SITE_KEY"
+              onChange={handleRecaptchaChange}
+            />
+          </div>
+          */}
         </div>
       )}
 
       <div className="button-group">
-        {currentSection > 0 && <button type="button" onClick={handleBack}>Voltar</button>}
-        {currentSection < 2 && <button type="button" onClick={handleNext}>Próximo</button>}
+        {currentSection > 0 && (
+          <button type="button" onClick={handleBack}>
+            Voltar
+          </button>
+        )}
+        {currentSection < 2 && (
+          <button type="button" onClick={() => validateFormSection() && handleNext()}>
+            Próximo
+          </button>
+        )}
         {currentSection === 2 && <button type="submit">Enviar</button>}
       </div>
     </form>
