@@ -1,3 +1,6 @@
+# Updates
+Preciso melhorar a validação de dados recebida pelo frontend. Melhorar a segurança do app.
+
 # Deploy
 ```javascript
 npm run build // Build
